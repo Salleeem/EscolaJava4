@@ -3,9 +3,20 @@ package com.example.model;
 public class Nota {
     private Aluno aluno;
     private Materia materia;
-    private Professor professor;
     private double valorNota;
     private int bimestre;
+
+    public Nota() {
+        // Inicialização padrão se necessário
+    }
+
+    // Construtor sem Professor
+    public Nota(Aluno aluno, Materia materia, double valorNota, int bimestre) {
+        this.aluno = aluno;
+        this.materia = materia;
+        this.valorNota = valorNota;
+        this.bimestre = bimestre;
+    }
 
     // Getters e Setters
     public Aluno getAluno() {
@@ -22,14 +33,6 @@ public class Nota {
 
     public void setMateria(Materia materia) {
         this.materia = materia;
-    }
-
-    public Professor getProfessor() {
-        return professor;
-    }
-
-    public void setProfessor(Professor professor) {
-        this.professor = professor;
     }
 
     public double getValorNota() {
@@ -54,7 +57,6 @@ public class Nota {
         return "Nota{" +
                 "aluno=" + aluno +
                 ", materia=" + materia +
-                ", professor=" + professor +
                 ", valorNota=" + valorNota +
                 ", bimestre=" + bimestre +
                 '}';

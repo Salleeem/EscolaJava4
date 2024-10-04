@@ -3,28 +3,45 @@ package com.example.repository;
 import com.example.model.Aluno;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AlunoRepository {
-    
     private Connection connection;
 
-    // Construtor para receber a conexão do banco de dados
     public AlunoRepository(Connection connection) {
         this.connection = connection;
     }
 
     public void cadastrarAluno(Aluno aluno) {
-        String sql = "INSERT INTO alunos (nome, cpf, ano_escolar, turno) VALUES (?, ?, ?, ?)";
+        // Implementação para cadastrar aluno
+    }
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, aluno.getNome()); // Adicionando nome
-            stmt.setString(2, aluno.getCpf());  // Adicionando cpf
-            stmt.setString(3, aluno.getAnoEscolar());
-            stmt.setString(4, aluno.getTurno());
-            stmt.executeUpdate();
-        } catch (SQLException e) {
+    public List<Aluno> buscarTodosOsAlunos() {
+        List<Aluno> alunos = new ArrayList<>();
+        String sql = "SELECT * FROM alunos"; // Ajuste a consulta de acordo com seu banco de dados
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Aluno aluno = new Aluno();
+                // Preencher os dados do aluno
+                aluno.setCpf(rs.getString("cpf")); // Exemplo
+                aluno.setNome(rs.getString("nome")); // Exemplo
+                // Adicione outros campos conforme necessário
+                alunos.add(aluno);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return alunos;
+    }
+
+    public boolean validarLogin(String cpf, String senha) {
+        // Implementação para validar login
+        return false; // Retorne true ou false conforme necessário
     }
 }

@@ -3,7 +3,7 @@ package com.example.model;
 public class Professor extends Pessoa {
     
     private int id;
-    private Materia materia; // A matéria que o professor leciona
+    private Materia materia; // A maté  ria que o professor leciona
     private double salario;
 
     // Getters e Setters
