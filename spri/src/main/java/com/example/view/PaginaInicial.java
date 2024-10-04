@@ -19,10 +19,14 @@ public class PaginaInicial extends JFrame {
         setTitle("Página Inicial");
         setSize(400, 300); // Tamanho da janela
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new GridLayout(4, 1)); // 4 linhas, 1 coluna
+        setLayout(new BorderLayout()); // Usando BorderLayout
 
         // Puxa as matérias quando a aplicação abre
         materias = obterMaterias();
+
+        // Painel para os botões com FlowLayout
+        JPanel panel = new JPanel();
+        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10)); // Centraliza os botões com espaçamento
 
         // Botão para cadastro de aluno
         JButton cadastroAlunoButton = new JButton("Cadastro de Aluno");
@@ -33,7 +37,7 @@ public class PaginaInicial extends JFrame {
                 dispose(); // Fecha a página inicial
             }
         });
-        add(cadastroAlunoButton);
+        panel.add(cadastroAlunoButton);
 
         // Botão para cadastro de matéria
         JButton cadastroMateriaButton = new JButton("Cadastro de Matéria");
@@ -44,21 +48,29 @@ public class PaginaInicial extends JFrame {
                 dispose(); // Fecha a página inicial
             }
         });
-        add(cadastroMateriaButton);
+        panel.add(cadastroMateriaButton);
 
+        // Botão para cadastro de professor
         // Botão para cadastro de professor
         JButton cadastroProfessorButton = new JButton("Cadastro de Professor");
         cadastroProfessorButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new CadastroProfessor(materias, obterConexao()); // Passa a lista de matérias e conexão
+                new CadastroProfessor(materias, obterConexao(), PaginaInicial.this); // Passa a referência da página
+                                                                                     // inicial
                 dispose(); // Fecha a página inicial
             }
         });
         add(cadastroProfessorButton);
 
-        // Label ou outro componente para preencher espaço
-        add(new JLabel("Escolha uma opção abaixo:"));
+        panel.add(cadastroProfessorButton);
+
+        // Adiciona o painel de botões ao centro do BorderLayout
+        add(panel, BorderLayout.CENTER);
+
+        // Label ou outro componente para preencher espaço na parte inferior
+        JLabel label = new JLabel("Escolha uma opção abaixo:", SwingConstants.CENTER);
+        add(label, BorderLayout.NORTH); // Adiciona o label na parte inferior
 
         setVisible(true); // Torna a janela visível
     }

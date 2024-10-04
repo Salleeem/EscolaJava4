@@ -18,15 +18,17 @@ public class CadastroProfessor extends JFrame {
     private JTextField salarioField;
     private JComboBox<Materia> materiaComboBox;
     private ProfessorRepository professorRepository;
+    private PaginaInicial paginaInicial; // Referência para a página inicial
 
-    public CadastroProfessor(List<Materia> materias, Connection connection) {
+    public CadastroProfessor(List<Materia> materias, Connection connection, PaginaInicial paginaInicial) {
         setTitle("Cadastro de Professor");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLayout(new GridLayout(5, 2));
+        setLayout(new GridLayout(6, 2, 10, 10)); // 6 linhas, 2 colunas e espaçamento
 
         // Inicializa o repositório de professores
         professorRepository = new ProfessorRepository(connection);
+        this.paginaInicial = paginaInicial; // Armazena a referência da página inicial
 
         // Campo para nome
         add(new JLabel("Nome:"));
@@ -61,7 +63,18 @@ public class CadastroProfessor extends JFrame {
         });
         add(cadastrarButton);
 
-        setVisible(true);
+        // Botão para voltar à página inicial
+        JButton voltarButton = new JButton("Voltar");
+        voltarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                paginaInicial.setVisible(true); // Torna a página inicial visível
+                dispose(); // Fecha a janela de cadastro
+            }
+        });
+        add(voltarButton); // Adiciona o botão "Voltar" no layout
+
+        setVisible(true); // Torna a janela visível
     }
 
     private void cadastrarProfessor() {
@@ -80,5 +93,13 @@ public class CadastroProfessor extends JFrame {
         professorRepository.cadastrarProfessor(professor);
 
         JOptionPane.showMessageDialog(this, "Professor cadastrado com sucesso!");
+        clearFields(); // Limpa os campos após o cadastro
+    }
+
+    private void clearFields() {
+        nomeField.setText("");
+        cpfField.setText("");
+        salarioField.setText("");
+        materiaComboBox.setSelectedIndex(0); // Reseta o ComboBox para o primeiro item
     }
 }
