@@ -1,114 +1,94 @@
 package com.example.view;
 
+import com.example.controller.MateriaController;
+import com.example.controller.ProfessorController;
 import com.example.model.Materia;
 import com.example.model.Professor;
-import com.example.repository.MateriaRepository;
-import com.example.repository.ProfessorRepository;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
 import java.util.List;
 
 public class CadastroProfessor extends JFrame {
-    private JTextField nomeField;
-    private JTextField cpfField;
-    private JTextField salarioField;
-    private JPasswordField senhaField; // Campo para a senha
-    private JComboBox<Materia> materiaComboBox;
-    private ProfessorRepository professorRepository;
-    private PaginaInicial paginaInicial; // Referência para a página inicial
 
-    public CadastroProfessor(List<Materia> materias, Connection connection, PaginaInicial paginaInicial) {
+    private JTextField txtNome;
+    private JTextField txtCpf;
+    private JComboBox<Materia> cbMateria;
+    private JTextField txtSalario;
+    private JPasswordField txtSenha;
+    private JButton btnCadastrar;
+
+    public CadastroProfessor() {
         setTitle("Cadastro de Professor");
-        setSize(400, 350); // Aumenta o tamanho para acomodar o novo campo
+        setSize(400, 400);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLayout(new GridLayout(7, 2, 10, 10)); // Aumenta para 7 linhas
+        setLocationRelativeTo(null);
 
-        // Inicializa o repositório de professores
-        professorRepository = new ProfessorRepository(connection);
-        this.paginaInicial = paginaInicial; // Armazena a referência da página inicial
+        // Layout
+        setLayout(null);
 
-        // Campo para nome
-        add(new JLabel("Nome:"));
-        nomeField = new JTextField();
-        add(nomeField);
+        JLabel lblNome = new JLabel("Nome:");
+        lblNome.setBounds(30, 30, 80, 25);
+        add(lblNome);
 
-        // Campo para CPF
-        add(new JLabel("CPF:"));
-        cpfField = new JTextField();
-        add(cpfField);
+        txtNome = new JTextField();
+        txtNome.setBounds(120, 30, 150, 25);
+        add(txtNome);
 
-        // Campo para salário
-        add(new JLabel("Salário:"));
-        salarioField = new JTextField();
-        add(salarioField);
+        JLabel lblCpf = new JLabel("CPF:");
+        lblCpf.setBounds(30, 70, 80, 25);
+        add(lblCpf);
 
-        // Campo para senha
-        add(new JLabel("Senha:"));
-        senhaField = new JPasswordField(); // Usando JPasswordField para ocultar a senha
-        add(senhaField);
+        txtCpf = new JTextField();
+        txtCpf.setBounds(120, 70, 150, 25);
+        add(txtCpf);
 
-        // ComboBox para selecionar a matéria
-        add(new JLabel("Matéria:"));
-        materiaComboBox = new JComboBox<>();
+        JLabel lblMateria = new JLabel("Matéria:");
+        lblMateria.setBounds(30, 110, 80, 25);
+        add(lblMateria);
+
+        cbMateria = new JComboBox<>();
+        List<Materia> materias = MateriaController.listarMaterias();
         for (Materia materia : materias) {
-            materiaComboBox.addItem(materia);
+            cbMateria.addItem(materia);
         }
-        add(materiaComboBox);
+        cbMateria.setBounds(120, 110, 150, 25);
+        add(cbMateria);
 
-        // Botão para cadastrar o professor
-        JButton cadastrarButton = new JButton("Cadastrar");
-        cadastrarButton.addActionListener(new ActionListener() {
+        JLabel lblSalario = new JLabel("Salário:");
+        lblSalario.setBounds(30, 150, 80, 25);
+        add(lblSalario);
+
+        txtSalario = new JTextField();
+        txtSalario.setBounds(120, 150, 150, 25);
+        add(txtSalario);
+
+        JLabel lblSenha = new JLabel("Senha:");
+        lblSenha.setBounds(30, 190, 80, 25);
+        add(lblSenha);
+
+        txtSenha = new JPasswordField();
+        txtSenha.setBounds(120, 190, 150, 25);
+        add(txtSenha);
+
+        btnCadastrar = new JButton("Cadastrar");
+        btnCadastrar.setBounds(120, 230, 150, 30);
+        add(btnCadastrar);
+
+        btnCadastrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cadastrarProfessor();
+                Professor professor = new Professor();
+                professor.setNome(txtNome.getText());
+                professor.setCpf(txtCpf.getText());
+                professor.setMateria((Materia) cbMateria.getSelectedItem());
+                professor.setSalario(Double.parseDouble(txtSalario.getText()));
+                professor.setSenha(new String(txtSenha.getPassword()));
+
+                ProfessorController.cadastrarProfessor(professor);
+                JOptionPane.showMessageDialog(null, "Professor cadastrado com sucesso!");
             }
         });
-        add(cadastrarButton);
-
-        // Botão para voltar à página inicial
-        JButton voltarButton = new JButton("Voltar");
-        voltarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                paginaInicial.setVisible(true); // Torna a página inicial visível
-                dispose(); // Fecha a janela de cadastro
-            }
-        });
-        add(voltarButton); // Adiciona o botão "Voltar" no layout
-
-        setVisible(true); // Torna a janela visível
-    }
-
-    private void cadastrarProfessor() {
-        String nome = nomeField.getText();
-        String cpf = cpfField.getText();
-        double salario = Double.parseDouble(salarioField.getText());
-        String senha = new String(senhaField.getPassword()); // Obtendo a senha do JPasswordField
-        Materia materiaSelecionada = (Materia) materiaComboBox.getSelectedItem();
-
-        Professor professor = new Professor();
-        professor.setNome(nome);
-        professor.setCpf(cpf);
-        professor.setSalario(salario);
-        professor.setMateria(materiaSelecionada);
-        professor.setSenha(senha); // Define a senha no objeto Professor
-
-        // Salvar professor no banco de dados
-        professorRepository.cadastrarProfessor(professor);
-
-        JOptionPane.showMessageDialog(this, "Professor cadastrado com sucesso!");
-        clearFields(); // Limpa os campos após o cadastro
-    }
-
-    private void clearFields() {
-        nomeField.setText("");
-        cpfField.setText("");
-        salarioField.setText("");
-        senhaField.setText(""); // Limpa o campo de senha
-        materiaComboBox.setSelectedIndex(0); // Reseta o ComboBox para o primeiro item
     }
 }

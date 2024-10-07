@@ -1,0 +1,4 @@
+Boletim Escolar do Aluno ID: 1
+Notas:
+Matéria: Geografia, Bimestre: 2, Notas: 2.0 3.0 10.0 10.0 5.0 , Faltas: 1, Média: 6.0
+Matéria: Geografia, Bimestre: 1, Notas: 1.0 1.0 1.0 1.0 1.0 , Faltas: 0, Média: 1.0

@@ -5,6 +5,7 @@ import com.example.view.PaginaInicial;
 public class Main {
     public static void main(String[] args) {
         // Abrir a página inicial
-        new PaginaInicial();
+        PaginaInicial paginaInicial = new PaginaInicial();
+        paginaInicial.showPage(); // Certifique-se de chamar setVisible(true)
     }
 }

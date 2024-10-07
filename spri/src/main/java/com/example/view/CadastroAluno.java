@@ -1,102 +1,106 @@
 package com.example.view;
 
 import com.example.controller.AlunoController;
-import com.example.database.DBConnection;
 import com.example.model.Aluno;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
 
 public class CadastroAluno extends JFrame {
-    private JTextField nomeField;
-    private JTextField cpfField;
-    private JTextField anoEscolarField;
-    private JTextField turnoField;
-    private JPasswordField senhaField; // Campo para senha
-    private JButton cadastrarButton;
-    private JButton voltarButton;
 
-    public CadastroAluno(PaginaInicial paginaInicial) {
+    // Componentes da interface
+    private JTextField txtNome;
+    private JTextField txtCpf;
+    private JTextField txtAnoEscolar;
+    private JTextField txtTurno;
+    private JPasswordField txtSenha;
+
+    public CadastroAluno() {
         setTitle("Cadastro de Aluno");
-        setSize(400, 350); // Aumentando a altura para incluir o campo de senha
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLayout(new GridLayout(7, 2, 10, 10)); // 7 linhas, 2 colunas
+        setSize(400, 300);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
 
-        // Campos de entrada
-        add(new JLabel("Nome:"));
-        nomeField = new JTextField();
-        add(nomeField);
+        // Painel principal
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(6, 2));
 
-        add(new JLabel("CPF:"));
-        cpfField = new JTextField();
-        add(cpfField);
+        // Labels e Campos de Texto
+        JLabel lblNome = new JLabel("Nome:");
+        txtNome = new JTextField();
+        JLabel lblCpf = new JLabel("CPF:");
+        txtCpf = new JTextField();
+        JLabel lblAnoEscolar = new JLabel("Ano Escolar:");
+        txtAnoEscolar = new JTextField();
+        JLabel lblTurno = new JLabel("Turno:");
+        txtTurno = new JTextField();
+        JLabel lblSenha = new JLabel("Senha:");
+        txtSenha = new JPasswordField();
 
-        add(new JLabel("Ano Escolar:"));
-        anoEscolarField = new JTextField();
-        add(anoEscolarField);
+        // Botão para cadastrar
+        JButton btnCadastrar = new JButton("Cadastrar");
 
-        add(new JLabel("Turno:"));
-        turnoField = new JTextField();
-        add(turnoField);
-
-        add(new JLabel("Senha:")); // Rótulo para senha
-        senhaField = new JPasswordField(); // Usando JPasswordField para entrada de senha
-        add(senhaField);
-
-        // Botão de cadastro
-        cadastrarButton = new JButton("Cadastrar");
-        add(cadastrarButton);
-
-        // Ação do botão de cadastro
-        cadastrarButton.addActionListener(new ActionListener() {
+        // Ação do botão
+        btnCadastrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cadastrarAluno();
+                cadastrarAluno(); // Método para cadastrar o aluno
             }
         });
 
-        // Botão para voltar à página inicial
-        voltarButton = new JButton("Voltar");
-        voltarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                paginaInicial.setVisible(true);
-                dispose();
-            }
-        });
-        add(voltarButton);
+        // Adicionando componentes ao painel
+        panel.add(lblNome);
+        panel.add(txtNome);
+        panel.add(lblCpf);
+        panel.add(txtCpf);
+        panel.add(lblAnoEscolar);
+        panel.add(txtAnoEscolar);
+        panel.add(lblTurno);
+        panel.add(txtTurno);
+        panel.add(lblSenha);
+        panel.add(txtSenha);
+        panel.add(new JLabel()); // Espaço vazio
+        panel.add(btnCadastrar);
 
-        setVisible(true);
+        add(panel);
     }
 
+    // Método para cadastrar o aluno
     private void cadastrarAluno() {
-        Aluno aluno = new Aluno();
-        aluno.setNome(nomeField.getText());
-        aluno.setCpf(cpfField.getText());
-        aluno.setAnoEscolar(anoEscolarField.getText());
-        aluno.setTurno(turnoField.getText());
-        aluno.setSenha(new String(senhaField.getPassword())); // Capturando a senha
+        // Obter dados dos campos de texto
+        String nome = txtNome.getText();
+        String cpf = txtCpf.getText();
+        String anoEscolar = txtAnoEscolar.getText();
+        String turno = txtTurno.getText();
+        String senha = new String(txtSenha.getPassword());
 
-        // Conectar ao banco de dados e cadastrar aluno
-        try (Connection connection = DBConnection.getConnection()) {
-            AlunoController alunoController = new AlunoController(connection);
-            alunoController.cadastrarAluno(aluno);
-            JOptionPane.showMessageDialog(this, "Aluno cadastrado com sucesso!");
-            clearFields();
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Erro ao cadastrar aluno: " + e.getMessage());
+        // Verificar se todos os campos foram preenchidos
+        if (nome.isEmpty() || cpf.isEmpty() || anoEscolar.isEmpty() || turno.isEmpty() || senha.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos.");
+            return;
         }
-    }
 
-    private void clearFields() {
-        nomeField.setText("");
-        cpfField.setText("");
-        anoEscolarField.setText("");
-        turnoField.setText("");
-        senhaField.setText(""); // Limpando o campo de senha
+        // Criar objeto Aluno
+        Aluno aluno = new Aluno();
+        aluno.setNome(nome);
+        aluno.setCpf(cpf);
+        aluno.setAnoEscolar(anoEscolar);
+        aluno.setTurno(turno);
+        aluno.setSenha(senha);
+
+        // Chamar o controlador para salvar o aluno no banco de dados
+        AlunoController.cadastrarAluno(aluno);
+
+        // Exibir mensagem de sucesso
+        JOptionPane.showMessageDialog(this, "Aluno cadastrado com sucesso!");
+
+        // Limpar campos
+        txtNome.setText("");
+        txtCpf.setText("");
+        txtAnoEscolar.setText("");
+        txtTurno.setText("");
+        txtSenha.setText("");
     }
 }

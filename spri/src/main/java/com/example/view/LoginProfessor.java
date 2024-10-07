@@ -1,89 +1,80 @@
 package com.example.view;
 
 import com.example.controller.ProfessorController;
-import com.example.database.DBConnection;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
 
 public class LoginProfessor extends JFrame {
-    private Connection connection; // Conexão com o banco de dados
-    private JTextField cpfField;
-    private JPasswordField senhaField; // Campo para a senha
-    private JButton loginButton;
-    private JButton voltarButton; // Novo botão para voltar
-    private PaginaInicial paginaInicial; // Referência para a página inicial
+    private JTextField txtCpf;
+    private JPasswordField txtSenha;
+    private JButton btnLogin;
+    private JButton btnVoltar; // Adicionando o botão de voltar
 
-    // Construtor modificado para aceitar a conexão e a referência da PaginaInicial
-    public LoginProfessor(PaginaInicial paginaInicial, Connection connection) {
-        this.connection = connection; // Armazena a conexão
-        this.paginaInicial = paginaInicial; // Armazena a referência
-        setTitle("Login do Professor");
-        setSize(300, 200); // Aumenta o tamanho para acomodar o novo campo
+    public LoginProfessor() {
+        // Configurações da JFrame
+        setTitle("Login Professor");
+        setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new GridLayout(5, 2)); // Ajusta o layout para 5 linhas
+        setLocationRelativeTo(null);
 
-        // Campo para CPF
-        add(new JLabel("CPF:"));
-        cpfField = new JTextField();
-        add(cpfField);
+        // Criando os campos de CPF e Senha
+        JLabel lblCpf = new JLabel("CPF:");
+        lblCpf.setBounds(80, 80, 80, 25);
+        txtCpf = new JTextField();
+        txtCpf.setBounds(140, 80, 160, 25);
 
-        // Campo para Senha
-        add(new JLabel("Senha:"));
-        senhaField = new JPasswordField(); // Usando JPasswordField para ocultar a senha
-        add(senhaField);
+        JLabel lblSenha = new JLabel("Senha:");
+        lblSenha.setBounds(80, 120, 80, 25);
+        txtSenha = new JPasswordField();
+        txtSenha.setBounds(140, 120, 160, 25);
 
         // Botão de login
-        loginButton = new JButton("Login");
-        add(loginButton);
-        
-        // Ação do botão de login
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                realizarLogin();
-            }
-        });
+        btnLogin = new JButton("Login");
+        btnLogin.setBounds(140, 160, 100, 30);
 
         // Botão de voltar
-        voltarButton = new JButton("Voltar");
-        add(voltarButton);
+        btnVoltar = new JButton("Voltar");
+        btnVoltar.setBounds(140, 200, 100, 30); // Posicionando o botão de voltar
 
-        // Ação do botão de voltar
-        voltarButton.addActionListener(new ActionListener() {
+        // Adicionando ActionListener ao botão de login
+        btnLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                voltarParaPaginaInicial(); // Chama o método para voltar
+                String cpf = txtCpf.getText();
+                String senha = new String(txtSenha.getPassword());
+
+                // Verifique se as credenciais estão corretas e obtenha o nome e o ID
+                String nome = ProfessorController.validarLogin(cpf, senha);
+                int idProfessor = ProfessorController.getIdProfessor(cpf); // Adiciona método para obter ID
+
+                if (nome != null) {
+                    // Redireciona para o dashboard do professor
+                    new DashboardProfessor(nome, idProfessor).setVisible(true);
+                    dispose(); // Fecha a janela de login
+                } else {
+                    JOptionPane.showMessageDialog(null, "Credenciais inválidas!");
+                }
             }
         });
 
-        setVisible(true);
-    }
-
-    private void realizarLogin() {
-        String cpf = cpfField.getText();
-        String senha = new String(senhaField.getPassword()); // Obtém a senha do campo
-
-        // Validar CPF e senha
-        try {
-            ProfessorController professorController = new ProfessorController(connection);
-            if (professorController.validarLogin(cpf, senha)) { // Atualiza a chamada para validarLogin
-                new DashboardProfessor(cpf, connection); // Passa a conexão ao Dashboard
+        // Adicionando ActionListener ao botão de voltar
+        btnVoltar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 dispose(); // Fecha a tela de login
-            } else {
-                JOptionPane.showMessageDialog(this, "CPF ou senha inválidos! Tente novamente.");
+                new PaginaInicial().setVisible(true); // Abre a tela inicial
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Erro ao conectar ao banco de dados: " + e.getMessage());
-        }
-    }
+        });
 
-    private void voltarParaPaginaInicial() {
-        paginaInicial.setVisible(true); // Torna a página inicial visível
-        dispose(); // Fecha a tela de login
+        // Layout e adição dos componentes
+        setLayout(null);
+        add(lblCpf);
+        add(txtCpf);
+        add(lblSenha);
+        add(txtSenha);
+        add(btnLogin);
+        add(btnVoltar); // Adiciona o botão de voltar
     }
 }

@@ -1,20 +1,8 @@
 package com.example.model;
 
 public class Materia {
-    
     private int id;
-    private String nome; 
-    private int cargaHoraria;
-
-    // Construtor padrão
-    public Materia() {}
-
-    // Construtor com parâmetros
-    public Materia(int id, String nome, int cargaHoraria) {
-        this.id = id;
-        this.nome = nome;
-        this.cargaHoraria = cargaHoraria;
-    }
+    private String nome;
 
     // Getters e Setters
     public int getId() {
@@ -33,20 +21,9 @@ public class Materia {
         this.nome = nome;
     }
 
-    public int getCargaHoraria() {
-        return cargaHoraria;
-    }
-
-    public void setCargaHoraria(int cargaHoraria) {
-        this.cargaHoraria = cargaHoraria;
-    }
-
+    // toString
     @Override
     public String toString() {
-        return "Materia{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", cargaHoraria=" + cargaHoraria +
-                '}';
+        return nome; // Retorna o nome da matéria
     }
 }

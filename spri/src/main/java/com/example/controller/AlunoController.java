@@ -1,30 +1,120 @@
 package com.example.controller;
 
+import com.example.database.DBConnection;
 import com.example.model.Aluno;
-import com.example.repository.AlunoRepository;
+import com.example.model.Nota;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 public class AlunoController {
-    
-    private AlunoRepository alunoRepository;
 
-    public AlunoController(Connection connection) {
-        this.alunoRepository = new AlunoRepository(connection);
+    // Método para cadastrar aluno no banco de dados
+    public static void cadastrarAluno(Aluno aluno) {
+        String sql = "INSERT INTO alunos (nome, cpf, ano_escolar, turno, senha) VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, aluno.getNome());
+            stmt.setString(2, aluno.getCpf());
+            stmt.setString(3, aluno.getAnoEscolar());
+            stmt.setString(4, aluno.getTurno());
+            stmt.setString(5, aluno.getSenha());
+
+            stmt.executeUpdate();
+            System.out.println("Aluno cadastrado com sucesso!");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void cadastrarAluno(Aluno aluno) {
-        alunoRepository.cadastrarAluno(aluno);
+    // Método para listar todos os alunos cadastrados
+    // Método para listar todos os alunos cadastrados
+public static List<Aluno> listarAlunos() {
+    List<Aluno> alunos = new ArrayList<>();
+    String sql = "SELECT * FROM alunos";
+
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+
+        while (rs.next()) {
+            Aluno aluno = new Aluno();
+            aluno.setId(rs.getInt("id")); // Obtenha o id do aluno
+            aluno.setNome(rs.getString("nome"));
+            aluno.setCpf(rs.getString("cpf"));
+            aluno.setAnoEscolar(rs.getString("ano_escolar"));
+            aluno.setTurno(rs.getString("turno"));
+            aluno.setSenha(rs.getString("senha")); // Se necessário
+            alunos.add(aluno);
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
 
-    public List<Aluno> buscarTodosOsAlunos() {
-        return alunoRepository.buscarTodosOsAlunos(); // Chama o repositório para buscar todos os alunos
+    return alunos; // Retorna a lista de alunos
+}
+
+
+    // Método para validar login do aluno e retornar seu nome
+    public static Object[] validarLogin(String cpf, String senha) {
+        String sql = "SELECT id, nome FROM alunos WHERE cpf = ? AND senha = ?";
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             
+            pstmt.setString(1, cpf);
+            pstmt.setString(2, senha);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                int id = rs.getInt("id");
+                String nome = rs.getString("nome");
+                return new Object[]{nome, id}; // Retorna nome e ID do aluno
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Erro ao validar login: " + e.getMessage());
+        }
+        return null; // Retorna null se as credenciais forem inválidas
     }
 
-    // Método para validar CPF e senha
-    public boolean validarLogin(String cpf, String senha) {
-        return alunoRepository.validarLogin(cpf, senha); // Chama o repositório para validar
-    }
+    public static void gerarBoletimTxt(int idAluno, List<Nota> notas) {
+        String nomeArquivo = "boletim_aluno_" + idAluno + ".txt";
+        
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(nomeArquivo))) {
+            writer.write("Boletim Escolar do Aluno ID: " + idAluno);
+            writer.newLine();
+            writer.write("Notas:");
+            writer.newLine();
 
-    
+            for (Nota nota : notas) {
+                StringBuilder notasBimestre = new StringBuilder();
+                for (double n : nota.getNotasBimestre()) {
+                    notasBimestre.append(n).append(" ");
+                }
+                double media = nota.calcularMediaBimestre();
+                writer.write("Matéria: " + nota.getMateria().getNome() + ", Bimestre: " + nota.getBimestre() +
+                        ", Notas: " + notasBimestre.toString() + ", Faltas: " + nota.getFaltas() +
+                        ", Média: " + media);
+                writer.newLine();
+            }
+            JOptionPane.showMessageDialog(null, "Boletim gerado com sucesso: " + nomeArquivo);
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Erro ao gerar boletim: " + e.getMessage());
+        }
+    }
 }

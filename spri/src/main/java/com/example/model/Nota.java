@@ -1,21 +1,24 @@
 package com.example.model;
 
+import java.util.Arrays;
+
 public class Nota {
     private Aluno aluno;
     private Materia materia;
-    private double valorNota;
+    private double[] notasBimestre; // 5 notas para cada bimestre
     private int bimestre;
+    private int faltas;
 
     public Nota() {
-        // Inicialização padrão se necessário
+        notasBimestre = new double[5]; // Inicializando array de 5 notas
     }
 
-    // Construtor sem Professor
-    public Nota(Aluno aluno, Materia materia, double valorNota, int bimestre) {
+    public Nota(Aluno aluno, Materia materia, double[] notasBimestre, int bimestre, int faltas) {
         this.aluno = aluno;
         this.materia = materia;
-        this.valorNota = valorNota;
+        this.notasBimestre = notasBimestre;
         this.bimestre = bimestre;
+        this.faltas = faltas;
     }
 
     // Getters e Setters
@@ -35,12 +38,12 @@ public class Nota {
         this.materia = materia;
     }
 
-    public double getValorNota() {
-        return valorNota;
+    public double[] getNotasBimestre() {
+        return notasBimestre;
     }
 
-    public void setValorNota(double valorNota) {
-        this.valorNota = valorNota;
+    public void setNotasBimestre(double[] notasBimestre) {
+        this.notasBimestre = notasBimestre;
     }
 
     public int getBimestre() {
@@ -51,14 +54,33 @@ public class Nota {
         this.bimestre = bimestre;
     }
 
-    // toString
+    public int getFaltas() {
+        return faltas;
+    }
+
+    public void setFaltas(int faltas) {
+        this.faltas = faltas;
+    }
+
+    // Método para calcular a média do bimestre
+    public double calcularMediaBimestre() {
+        double soma = 0;
+        for (double nota : notasBimestre) {
+            soma += nota;
+        }
+        return soma / notasBimestre.length;
+    }
+
     @Override
     public String toString() {
+        String nomeMateria = (materia != null) ? materia.getNome() : "Matéria não atribuída";
         return "Nota{" +
-                "aluno=" + aluno +
-                ", materia=" + materia +
-                ", valorNota=" + valorNota +
+                "aluno=" + aluno.getNome() +
+                ", materia=" + nomeMateria +
+                ", notasBimestre=" + Arrays.toString(notasBimestre) +
                 ", bimestre=" + bimestre +
+                ", faltas=" + faltas +
                 '}';
     }
+
 }

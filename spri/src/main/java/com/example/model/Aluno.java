@@ -6,13 +6,7 @@ public class Aluno extends Pessoa {
     private String turno;
 
     // Getters e Setters
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    
 
     public String getAnoEscolar() {
         return anoEscolar;
@@ -28,6 +22,14 @@ public class Aluno extends Pessoa {
 
     public void setTurno(String turno) {
         this.turno = turno;
+    }
+
+    public int getId(){
+        return id;
+    }
+
+    public void setId(int id){
+        this.id = id;
     }
 
     // toString
