@@ -213,7 +213,7 @@ O Sistema de Gestão Escolar visa gerenciar o cadastro de professores e alunos, 
 
 **Diagrama de Uso:**
 
-![alt text](img/test.png)
+![alt text](img/Uso.png)
 
 # Manual do Usuário
 
