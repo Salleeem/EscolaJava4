@@ -117,60 +117,60 @@ O Sistema de Gestão Escolar visa gerenciar o cadastro de professores e alunos, 
 
 **Aluno:**
 
-CREATE TABLE Aluno (
-    id SERIAL PRIMARY KEY,
-    anoEscolar VARCHAR(50) NOT NULL,
-    turno VARCHAR(50) NOT NULL,
-    pessoa_id INT,
-    FOREIGN KEY (pessoa_id) REFERENCES Pessoa(id) ON DELETE CASCADE
-);
+- CREATE TABLE Aluno (
+-    id SERIAL PRIMARY KEY,
+-    anoEscolar VARCHAR(50) NOT NULL,
+-    turno VARCHAR(50) NOT NULL,
+-    pessoa_id INT,
+-    FOREIGN KEY (pessoa_id) REFERENCES Pessoa(id) ON DELETE CASCADE
+- );
 
 
 **Pessoa:**
 
-CREATE TABLE Pessoa (
-    id SERIAL PRIMARY KEY,
-    nome VARCHAR(255) NOT NULL,
-    cpf VARCHAR(11) NOT NULL UNIQUE,
-    senha VARCHAR(255) NOT NULL
-);
+- CREATE TABLE Pessoa (
+-    id SERIAL PRIMARY KEY,
+-    nome VARCHAR(255) NOT NULL,
+-    cpf VARCHAR(11) NOT NULL UNIQUE,
+-    senha VARCHAR(255) NOT NULL
+- );
 
 
 **Professor:**
 
-CREATE TABLE Professor (
-    id SERIAL  PRIMARY KEY,
-    materia_id INT,
-    salario DECIMAL(10, 2) NOT NULL,
-    pessoa_id INT,
-    FOREIGN KEY (materia_id) REFERENCES Materia(id),
-);
+- CREATE TABLE Professor (
+-   id SERIAL  PRIMARY KEY,
+-    materia_id INT,
+-    salario DECIMAL(10, 2) NOT NULL,
+-    pessoa_id INT,
+-    FOREIGN KEY (materia_id) REFERENCES Materia(id),
+- );
 
 
 **Matéria:**
 
-CREATE TABLE Materia (
-    id SERIAL PRIMARY KEY,
-    nome VARCHAR(255) NOT NULL
-);
+-CREATE TABLE Materia (
+-    id SERIAL PRIMARY KEY,
+-    nome VARCHAR(255) NOT NULL
+- );
 
 
 **Nota:**
 
-CREATE TABLE notas (
-    id SERIAL PRIMARY KEY,
-    id_aluno INT NOT NULL,
-    id_materia INT NOT NULL,
-    bimestre INT NOT NULL,
-    nota1 DOUBLE PRECISION,
-    nota2 DOUBLE PRECISION,
-    nota3 DOUBLE PRECISION,
-    nota4 DOUBLE PRECISION,
-    nota5 DOUBLE PRECISION,
-    faltas INT DEFAULT 0,
-    FOREIGN KEY (id_aluno) REFERENCES alunos(id),
-    FOREIGN KEY (id_materia) REFERENCES materias(id)
-);
+- CREATE TABLE notas (
+-    id SERIAL PRIMARY KEY,
+-    id_aluno INT NOT NULL,
+-    id_materia INT NOT NULL,
+-    bimestre INT NOT NULL,
+-    nota1 DOUBLE PRECISION,
+-    nota2 DOUBLE PRECISION,
+-    nota3 DOUBLE PRECISION,
+-    nota4 DOUBLE PRECISION,
+-    nota5 DOUBLE PRECISION,
+-    faltas INT DEFAULT 0,
+-    FOREIGN KEY (id_aluno) REFERENCES alunos(id),
+-    FOREIGN KEY (id_materia) REFERENCES materias(id)
+- );
 
 
 
