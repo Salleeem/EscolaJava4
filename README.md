@@ -1,4 +1,4 @@
-
+# EscolaJava4
 
 ---
 
@@ -104,4 +104,15 @@ O Sistema de Gestão Escolar visa gerenciar o cadastro de professores e alunos, 
 
 ---
 
+## Desenvolvimento
+
+**Diagrama de Fluxo:**
+
+![alt text](img/FluxoEscola.png)
+
+**Diagrama de Classes:**
+
+
+
+**Diagrama de Uso:**
 
