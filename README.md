@@ -1,4 +1,4 @@
-
+# EscolaJava4
 
 ---
 
@@ -104,4 +104,163 @@ O Sistema de Gestão Escolar visa gerenciar o cadastro de professores e alunos, 
 
 ---
 
+## Criação das Tabelas:
+
+**Admin:**
+
+- CREATE TABLE Admin (
+-    id SERIAL PRIMARY KEY,
+-    nome VARCHAR(255) NOT NULL,
+-   cpf VARCHAR(11) NOT NULL UNIQUE,
+-    senha VARCHAR(255) NOT NULL
+- );
+
+**Aluno:**
+
+- CREATE TABLE Aluno (
+-    id SERIAL PRIMARY KEY,
+-    anoEscolar VARCHAR(50) NOT NULL,
+-    turno VARCHAR(50) NOT NULL,
+-    pessoa_id INT,
+-    FOREIGN KEY (pessoa_id) REFERENCES Pessoa(id) ON DELETE CASCADE
+- );
+
+
+**Pessoa:**
+
+- CREATE TABLE Pessoa (
+-    id SERIAL PRIMARY KEY,
+-    nome VARCHAR(255) NOT NULL,
+-    cpf VARCHAR(11) NOT NULL UNIQUE,
+-    senha VARCHAR(255) NOT NULL
+- );
+
+
+**Professor:**
+
+- CREATE TABLE Professor (
+-   id SERIAL  PRIMARY KEY,
+-    materia_id INT,
+-    salario DECIMAL(10, 2) NOT NULL,
+-    pessoa_id INT,
+-    FOREIGN KEY (materia_id) REFERENCES Materia(id),
+- );
+
+
+**Matéria:**
+
+- CREATE TABLE Materia (
+-    id SERIAL PRIMARY KEY,
+-    nome VARCHAR(255) NOT NULL
+- );
+
+
+**Nota:**
+
+- CREATE TABLE notas (
+-    id SERIAL PRIMARY KEY,
+-    id_aluno INT NOT NULL,
+-    id_materia INT NOT NULL,
+-    bimestre INT NOT NULL,
+-    nota1 DOUBLE PRECISION,
+-    nota2 DOUBLE PRECISION,
+-    nota3 DOUBLE PRECISION,
+-    nota4 DOUBLE PRECISION,
+-    nota5 DOUBLE PRECISION,
+-    faltas INT DEFAULT 0,
+-    FOREIGN KEY (id_aluno) REFERENCES alunos(id),
+-    FOREIGN KEY (id_materia) REFERENCES materias(id)
+- );
+
+
+
+## Desenvolvimento
+
+**Diagrama de Fluxo:**
+
+![alt text](img/FluxoEscola.png)
+
+**Diagrama de Classes:**
+
+![alt text](img/Classsees.png)
+
+**Diagrama de Uso:**
+
+![alt text](img/Uso.png)
+
+# Manual do Usuário
+
+---
+
+## Visão Geral
+
+Bem-vindo! Este sistema foi projetado para facilitar o gerenciamento de notas, e informações dos alunos e professores, garantindo uma comunicação clara entre os mesmos.
+
+### Funcionalidades principais:
+
+- Cadastro e login de professores e alunos.
+- Professores podem cadastrar e consultar notas dos alunos.
+- Alunos podem visualizar suas notas e anotações de recuperação.
+- Sistema de autenticação seguro com gerenciamento de perfil.
+
+## Acesso ao Sistema
+
+1.O sistema deve ser aberto por meio da aplicação em Java.
+
+## Login de Administradores
+
+1. Acesse a página de Login e coloque suas credenciais.
+
+## Funcionalidades de Adiministradores
+
+1. Cadastrar Alunos.
+2. Cadastrar Professores.
+3. Cadastrar Matérias.
+4. Ver todos os Usuários.
+5. Editar os Usuários.
+6. Exlcuir os Usuários.
+
+### Login de Professores
+
+1. Acesse a página inicial do sistema.
+2. Clique no botão **Login** no topo da página.
+3. Insira seu CPF e senha.
+4. Clique em **Entrar** para acessar sua área de professor.
+
+**Problemas de acesso:** Caso tenha esquecido a senha, entre em contato com o administrador do sistema para redefinir.
+
+### Login de Alunos
+
+1. Acesse a página inicial do sistema.
+2. Clique no botão **Login** no topo da página.
+3. Insira seu CPF e senha.
+4. Clique em **Entrar** para acessar sua área de aluno.
+
+## Funcionalidades para Professores
+
+1. Atribuir as notas de um determinado bimestre aos alunos.
+2. Editar as Notas.
+3. Visualizar as Notas.
+
+### Cadastrar Notas
+
+1. Faça o login como Professor.
+2. Selecione o aluno para o qual deseja cadastrar a nota.
+3. Preencha a nota no campo apropriado.
+4. Clique em **Salvar** para registrar a nota no sistema.
+
+### Consultar Notas dos Alunos
+
+1. Faça cadastro como Aluno.
+2. As notas atribuídas aparecerão na tela.
+
+
+## Funcionalidades para Alunos
+
+1.Visualizar as Notas
+
+
+## Encerrando a Sessão
+
+Para sair do sistema, clique no botão **Sair** no canto superior direito da tela. Você será redirecionado para a página de login.
 
