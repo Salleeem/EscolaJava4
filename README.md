@@ -149,7 +149,7 @@ O Sistema de Gestão Escolar visa gerenciar o cadastro de professores e alunos, 
 
 **Matéria:**
 
--CREATE TABLE Materia (
+- CREATE TABLE Materia (
 -    id SERIAL PRIMARY KEY,
 -    nome VARCHAR(255) NOT NULL
 - );
