@@ -118,29 +118,13 @@ O Sistema de Gestão Escolar visa gerenciar o cadastro de professores e alunos, 
 
 ![alt text](img/Uso.png)
 
-# Manual do Usuário - Sistema de Gerenciamento de Professores e Alunos
-
-## Índice
-
-1. [Visão Geral](#visão-geral)
-2. [Acesso ao Sistema](#acesso-ao-sistema)
-   - [Login de Professores](#login-de-professores)
-   - [Login de Alunos](#login-de-alunos)
-3. [Funcionalidades para Professores](#funcionalidades-para-professores)
-   - [Cadastrar Notas](#cadastrar-notas)
-   - [Consultar Notas dos Alunos](#consultar-notas-dos-alunos)
-   - [Editar Perfil](#editar-perfil)
-4. [Funcionalidades para Alunos](#funcionalidades-para-alunos)
-   - [Visualizar Notas](#visualizar-notas)
-   - [Visualizar Anotações de Recuperação](#visualizar-anotações-de-recuperação)
-5. [Encerrando a Sessão](#encerrando-a-sessão)
-6. [Suporte](#suporte)
+# Manual do Usuário
 
 ---
 
 ## Visão Geral
 
-Bem-vindo ao Sistema de Gerenciamento de Professores e Alunos! Este sistema foi projetado para facilitar o gerenciamento de notas, anotações de recuperação e informações dos alunos, garantindo uma comunicação clara entre professores e alunos.
+Bem-vindo! Este sistema foi projetado para facilitar o gerenciamento de notas, e informações dos alunos e professores, garantindo uma comunicação clara entre os mesmos.
 
 ### Funcionalidades principais:
 
@@ -150,6 +134,8 @@ Bem-vindo ao Sistema de Gerenciamento de Professores e Alunos! Este sistema foi 
 - Sistema de autenticação seguro com gerenciamento de perfil.
 
 ## Acesso ao Sistema
+
+1.O sistema deve ser aberto por meio da aplicação em Java.
 
 ### Login de Professores
 
@@ -169,35 +155,27 @@ Bem-vindo ao Sistema de Gerenciamento de Professores e Alunos! Este sistema foi 
 
 ## Funcionalidades para Professores
 
+1. Atribuir as notas de um determinado bimestre aos alunos.
+2. Editar as Notas.
+3. Visualizar as Notas.
+
 ### Cadastrar Notas
 
-1. Após o login, acesse o menu **Notas**.
+1. Faça o login como Professor.
 2. Selecione o aluno para o qual deseja cadastrar a nota.
 3. Preencha a nota no campo apropriado.
 4. Clique em **Salvar** para registrar a nota no sistema.
 
 ### Consultar Notas dos Alunos
 
-1. No menu **Alunos**, selecione o nome do aluno.
+1. Faça cadastro como Aluno.
 2. As notas atribuídas aparecerão na tela.
 
-### Editar Perfil
-
-1. No canto superior direito, clique no ícone de perfil.
-2. Selecione a opção **Editar Perfil**.
-3. Altere as informações desejadas (nome, senha, etc.).
-4. Clique em **Salvar** para confirmar as alterações.
 
 ## Funcionalidades para Alunos
 
-### Visualizar Notas
+1.Visualizar as Notas
 
-1. Faça o login na sua conta de aluno.
-2. No menu **Minhas Notas**, todas as suas notas estarão disponíveis.
-
-### Visualizar Anotações de Recuperação
-
-1. Na página **Minhas Notas**, clique no link **Recuperação** para ver anotações deixadas pelo professor, caso haja necessidade de recuperação.
 
 ## Encerrando a Sessão
 
