@@ -137,6 +137,19 @@ Bem-vindo! Este sistema foi projetado para facilitar o gerenciamento de notas, e
 
 1.O sistema deve ser aberto por meio da aplicação em Java.
 
+## Login de Administradores
+
+1. Acesse a página de Login e coloque suas credenciais.
+
+## Funcionalidades de Adiministradores
+
+1. Cadastrar Alunos.
+2. Cadastrar Professores.
+3. Cadastrar Matérias.
+4. Ver todos os Usuários.
+5. Editar os Usuários.
+6. Exlcuir os Usuários.
+
 ### Login de Professores
 
 1. Acesse a página inicial do sistema.
