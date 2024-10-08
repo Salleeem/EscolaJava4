@@ -1,6 +1,8 @@
 package com.example.model;
 
 public class Aluno extends Pessoa {
+
+    //Atributos Exclusivos do Aluno
     private int id;
     private String anoEscolar;
     private String turno;

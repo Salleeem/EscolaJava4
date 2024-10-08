@@ -3,14 +3,16 @@ package com.example.model;
 import java.util.Arrays;
 
 public class Nota {
-    private Aluno aluno;
-    private Materia materia;
-    private double[] notasBimestre; // 5 notas para cada bimestre
+
+    //Atributos das Notas
+    private Aluno aluno; //Chave Estrangeira de Aluno
+    private Materia materia; //Chave Estrangeira de Materia
+    private double[] notasBimestre; // Como são 5 notas para cada bimestre usamos uma array
     private int bimestre;
     private int faltas;
-
+    
     public Nota() {
-        notasBimestre = new double[5]; // Inicializando array de 5 notas
+        notasBimestre = new double[5]; // Aqui atribuimos que serão 5 notas
     }
 
     public Nota(Aluno aluno, Materia materia, double[] notasBimestre, int bimestre, int faltas) {

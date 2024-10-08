@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 public class AdminController {
 
-    // Método para validar login do administrador via banco de dados
+    // Método para validar login do administrador
     public static boolean validarLogin(String cpf, String senha) {
         String sql = "SELECT * FROM administradores WHERE cpf = ? AND senha = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -30,7 +30,7 @@ public class AdminController {
         return false; // Admin não encontrado
     }
 
-    // Método para inserir um novo administrador (caso necessário)
+    // Método para inserir um novo administrador, no caso não é utilizado
     public static void cadastrarAdmin(Admin admin) {
         String sql = "INSERT INTO administradores (nome, cpf, senha) VALUES (?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();

@@ -22,11 +22,11 @@ public class ProfessorController {
         String sql = "INSERT INTO professores (nome, cpf, salario, senha) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             // Validação básica
-            if (professor.getNome() == null || professor.getCpf() == null || 
-                professor.getSalario() < 0 || professor.getSenha() == null) {
+            if (professor.getNome() == null || professor.getCpf() == null ||
+                    professor.getSalario() < 0 || professor.getSenha() == null) {
                 System.out.println("Todos os campos devem ser preenchidos corretamente.");
                 return;
             }
@@ -50,7 +50,7 @@ public class ProfessorController {
         String nome = null;
 
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, cpf);
             stmt.setString(2, senha);
@@ -73,7 +73,7 @@ public class ProfessorController {
         int idProfessor = -1; // Valor padrão para não encontrado
 
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, cpf);
 
@@ -94,7 +94,7 @@ public class ProfessorController {
         String sql = "INSERT INTO professores_materias (id_professor, id_materia) VALUES (?, ?)";
 
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, idProfessor);
             stmt.setInt(2, idMateria);
@@ -112,8 +112,8 @@ public class ProfessorController {
         String sql = "SELECT * FROM professores"; // SQL para selecionar todos os professores
 
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 // Criar um novo objeto Professor a partir dos dados do ResultSet
@@ -135,28 +135,101 @@ public class ProfessorController {
     }
 
     // Método para listar matérias de um professor com base no ID
-public static List<String> listarMateriasPorProfessor(int idProfessor) {
-    List<String> materias = new ArrayList<>();
-    String sql = "SELECT m.nome FROM materias m " +
-                 "JOIN professores_materias pm ON m.id = pm.id_materia " +
-                 "WHERE pm.id_professor = ?";
+    public static List<String> listarMateriasPorProfessor(int idProfessor) {
+        List<String> materias = new ArrayList<>();
+        String sql = "SELECT m.nome FROM materias m " +
+                "JOIN professores_materias pm ON m.id = pm.id_materia " +
+                "WHERE pm.id_professor = ?";
 
-    try (Connection conn = DBConnection.getConnection();
-         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-        stmt.setInt(1, idProfessor);
+            stmt.setInt(1, idProfessor);
 
-        try (ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                materias.add(rs.getString("nome")); // Adiciona o nome da matéria à lista
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    materias.add(rs.getString("nome")); // Adiciona o nome da matéria à lista
+                }
             }
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao listar matérias do professor: " + e.getMessage());
         }
 
-    } catch (SQLException e) {
-        System.err.println("Erro ao listar matérias do professor: " + e.getMessage());
+        return materias; // Retorna a lista de matérias
     }
 
-    return materias; // Retorna a lista de matérias
-}
+    // Método para editar os dados de um professor
+    public static void editarProfessor(Professor professor) {
+        String sql = "UPDATE professores SET nome = ?, cpf = ?, salario = ? WHERE id = ?";
+    
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+    
+            stmt.setString(1, professor.getNome());
+            stmt.setString(2, professor.getCpf());
+            stmt.setDouble(3, professor.getSalario()); // Inclua o salário
+            stmt.setInt(4, professor.getId());
+    
+            int rowsUpdated = stmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Professor atualizado com sucesso!");
+            } else {
+                System.out.println("Nenhum registro atualizado. Verifique se o ID está correto.");
+            }
+    
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Erro ao atualizar o professor: " + e.getMessage());
+        }
+    }
+    
+
+    // Método para excluir um professor
+    public static void excluirProfessor(int idProfessor) {
+        String sql = "DELETE FROM professores WHERE id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, idProfessor);
+
+            int rowsDeleted = stmt.executeUpdate();
+            if (rowsDeleted > 0) {
+                System.out.println("Professor excluído com sucesso!");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Erro ao excluir o professor: " + e.getMessage());
+        }
+    }
+
+    // Método para buscar professor pelo ID
+    public static Professor buscarProfessorPorId(int id) {
+        Professor professor = null;
+        String sql = "SELECT * FROM professores WHERE id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    professor = new Professor();
+                    professor.setId(rs.getInt("id"));
+                    professor.setNome(rs.getString("nome"));
+                    professor.setCpf(rs.getString("cpf"));
+                    professor.setSalario(rs.getDouble("salario"));
+                    professor.setSenha(rs.getString("senha")); // Se necessário
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Erro ao buscar professor: " + e.getMessage());
+        }
+        return professor; // Retorna o professor encontrado ou null se não encontrado
+    }
 
 }

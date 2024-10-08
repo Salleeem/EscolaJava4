@@ -1,6 +1,8 @@
 package com.example.model;
 
 public class Materia {
+
+    //Atributos
     private int id;
     private String nome;
 

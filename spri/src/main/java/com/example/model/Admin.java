@@ -1,6 +1,8 @@
 package com.example.model;
 
 public class Admin {
+
+    //Atributos
     private String nome;
     private String cpf;
     private String senha;

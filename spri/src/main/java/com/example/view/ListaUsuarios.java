@@ -11,6 +11,11 @@ import java.awt.*;
 import java.util.List;
 
 public class ListaUsuarios extends JFrame {
+    private JTable tableAlunos;
+    private JTable tableProfessores;
+    private DefaultTableModel modelAlunos;
+    private DefaultTableModel modelProfessores;
+
     public ListaUsuarios() {
         // Configurações da JFrame
         setTitle("Lista de Usuários");
@@ -20,43 +25,22 @@ public class ListaUsuarios extends JFrame {
 
         // Criar tabelas para alunos e professores
         String[] columnNamesAlunos = {"ID", "Nome", "CPF", "Ano Escolar", "Turno"};
-        String[] columnNamesProfessores = {"ID", "Nome", "CPF", "Matérias"}; // Atualizado para plural
+        String[] columnNamesProfessores = {"ID", "Nome", "CPF", "Matérias", "Salário"};
 
-        DefaultTableModel modelAlunos = new DefaultTableModel(columnNamesAlunos, 0);
-        DefaultTableModel modelProfessores = new DefaultTableModel(columnNamesProfessores, 0);
+        modelAlunos = new DefaultTableModel(columnNamesAlunos, 0);
+        modelProfessores = new DefaultTableModel(columnNamesProfessores, 0);
 
-        JTable tableAlunos = new JTable(modelAlunos);
-        JTable tableProfessores = new JTable(modelProfessores);
+        tableAlunos = new JTable(modelAlunos);
+        tableProfessores = new JTable(modelProfessores);
 
         // Carregar dados dos alunos
-        List<Aluno> alunos = AlunoController.listarAlunos();
-        for (Aluno aluno : alunos) {
-            modelAlunos.addRow(new Object[]{
-                aluno.getId(),
-                aluno.getNome(),
-                aluno.getCpf(),
-                aluno.getAnoEscolar(),
-                aluno.getTurno()
-            });
-        }
+        carregarDadosAlunos();
 
         // Carregar dados dos professores
-        List<Professor> professores = ProfessorController.listarProfessores();
-        for (Professor professor : professores) {
-            // Obter as matérias do professor
-            List<String> materias = ProfessorController.listarMateriasPorProfessor(professor.getId());
-            String materiasStr = String.join(", ", materias); // Unir as matérias em uma única string
-
-            modelProfessores.addRow(new Object[]{
-                professor.getId(),
-                professor.getNome(),
-                professor.getCpf(),
-                materiasStr // Adicionar a string das matérias
-            });
-        }
+        carregarDadosProfessores();
 
         // Layout e adição dos componentes
-        setLayout(new GridLayout(3, 1)); // Dividir em 3 linhas
+        setLayout(new BorderLayout());
         JScrollPane scrollAlunos = new JScrollPane(tableAlunos);
         JScrollPane scrollProfessores = new JScrollPane(tableProfessores);
 
@@ -68,14 +52,111 @@ public class ListaUsuarios extends JFrame {
         panelProfessores.add(new JLabel("Lista de Professores"), BorderLayout.NORTH);
         panelProfessores.add(scrollProfessores, BorderLayout.CENTER);
 
-        // Botão de voltar
-        JButton btnVoltar = new JButton("Voltar");
-        btnVoltar.addActionListener(e -> dispose()); // Fecha a janela ao clicar no botão
+        // Painel para botões
         JPanel panelBotao = new JPanel();
-        panelBotao.add(btnVoltar);
+        JButton btnEditarAlunos = new JButton("Editar Alunos");
+        JButton btnEditarProfessores = new JButton("Editar Professores");
+        JButton btnExcluir = new JButton("Excluir");
+        JButton btnVoltar = new JButton("Voltar");
+        JButton btnRefresh = new JButton("Refresh"); // Novo botão de Refresh
 
-        add(panelAlunos);
-        add(panelProfessores);
-        add(panelBotao); // Adiciona o painel do botão ao layout
+        btnEditarAlunos.addActionListener(e -> editarAluno());
+        btnEditarProfessores.addActionListener(e -> editarProfessor());
+        btnExcluir.addActionListener(e -> excluirUsuario());
+        btnVoltar.addActionListener(e -> dispose()); // Fecha a janela ao clicar no botão
+        btnRefresh.addActionListener(e -> refreshDados()); // Adiciona ação ao botão de Refresh
+
+        panelBotao.add(btnEditarAlunos);
+        panelBotao.add(btnEditarProfessores);
+        panelBotao.add(btnExcluir);
+        panelBotao.add(btnVoltar);
+        panelBotao.add(btnRefresh); // Adiciona o botão de Refresh ao painel
+
+        add(panelAlunos, BorderLayout.NORTH);
+        add(panelProfessores, BorderLayout.CENTER);
+        add(panelBotao, BorderLayout.SOUTH); // Adiciona o painel do botão ao layout
+    }
+
+    private void carregarDadosAlunos() {
+        modelAlunos.setRowCount(0); // Limpa a tabela antes de recarregar os dados
+        List<Aluno> alunos = AlunoController.listarAlunos();
+        for (Aluno aluno : alunos) {
+            modelAlunos.addRow(new Object[]{
+                aluno.getId(),
+                aluno.getNome(),
+                aluno.getCpf(),
+                aluno.getAnoEscolar(),
+                aluno.getTurno()
+            });
+        }
+    }
+
+    private void carregarDadosProfessores() {
+        modelProfessores.setRowCount(0); // Limpa a tabela antes de recarregar os dados
+        List<Professor> professores = ProfessorController.listarProfessores();
+        for (Professor professor : professores) {
+            List<String> materias = ProfessorController.listarMateriasPorProfessor(professor.getId());
+            String materiasStr = String.join(", ", materias);
+            modelProfessores.addRow(new Object[]{
+                professor.getId(),
+                professor.getNome(),
+                professor.getCpf(),
+                materiasStr,
+                professor.getSalario(),
+            });
+        }
+    }
+
+    private void refreshDados() {
+        carregarDadosAlunos(); // Recarrega dados dos alunos
+        carregarDadosProfessores(); // Recarrega dados dos professores
+    }
+
+    private void editarAluno() {
+        int selectedRowAlunos = tableAlunos.getSelectedRow();
+        if (selectedRowAlunos != -1) {
+            int alunoId = (int) tableAlunos.getValueAt(selectedRowAlunos, 0);
+            Aluno aluno = AlunoController.buscarAlunoPorId(alunoId);
+            new EditarAluno(aluno).setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, selecione um aluno para editar.");
+        }
+    }
+
+    private void editarProfessor() {
+        int selectedRowProfessores = tableProfessores.getSelectedRow();
+        if (selectedRowProfessores != -1) {
+            int professorId = (int) tableProfessores.getValueAt(selectedRowProfessores, 0);
+            Professor professor = ProfessorController.buscarProfessorPorId(professorId);
+            new EditarProfessor(professor).setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, selecione um professor para editar.");
+        }
+    }
+
+    private void excluirUsuario() {
+        int selectedRowAlunos = tableAlunos.getSelectedRow();
+        if (selectedRowAlunos != -1) {
+            int alunoId = (int) tableAlunos.getValueAt(selectedRowAlunos, 0);
+            int confirm = JOptionPane.showConfirmDialog(this, "Deseja realmente excluir o aluno?");
+            if (confirm == JOptionPane.YES_OPTION) {
+                AlunoController.excluirAluno(alunoId);
+                modelAlunos.removeRow(selectedRowAlunos);
+            }
+            return;
+        }
+
+        int selectedRowProfessores = tableProfessores.getSelectedRow();
+        if (selectedRowProfessores != -1) {
+            int professorId = (int) tableProfessores.getValueAt(selectedRowProfessores, 0);
+            int confirm = JOptionPane.showConfirmDialog(this, "Deseja realmente excluir o professor?");
+            if (confirm == JOptionPane.YES_OPTION) {
+                ProfessorController.excluirProfessor(professorId);
+                modelProfessores.removeRow(selectedRowProfessores);
+            }
+            return;
+        }
+
+        JOptionPane.showMessageDialog(this, "Por favor, selecione um usuário para excluir.");
     }
 }

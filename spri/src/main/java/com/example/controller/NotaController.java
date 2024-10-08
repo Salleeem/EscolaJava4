@@ -14,6 +14,7 @@ import java.util.List;
 
 public class NotaController {
 
+    //Método para atribuir uma nota ao Aluno
     public static void atribuirNota(Nota nota) {
         String sql = "INSERT INTO notas (id_aluno, id_materia, bimestre, nota1, nota2, nota3, nota4, nota5, faltas) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -23,7 +24,7 @@ public class NotaController {
             pstmt.setInt(1, nota.getAluno().getId());
             pstmt.setInt(2, nota.getMateria().getId());
             pstmt.setInt(3, nota.getBimestre());
-
+                
             double[] notasBimestre = nota.getNotasBimestre();
             pstmt.setDouble(4, notasBimestre[0]);
             pstmt.setDouble(5, notasBimestre[1]);

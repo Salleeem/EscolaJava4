@@ -12,6 +12,7 @@ import java.util.List;
 
 public class MateriaController {
 
+    //Método para o cadastro da Matéria
     public static void cadastrarMateria(Materia materia) {
         String sql = "INSERT INTO materias (nome) VALUES (?)";
 
@@ -27,6 +28,7 @@ public class MateriaController {
         }
     }
 
+    //Método para listar todas as Matérias
     public static List<Materia> listarMaterias() {
         List<Materia> materias = new ArrayList<>();
         String sql = "SELECT * FROM materias";
@@ -49,6 +51,7 @@ public class MateriaController {
         return materias;
     }
 
+    //Método para listar as matérias atribuidas a um Professor
     public static List<Materia> listarMateriasPorProfessor(int idProfessor) {
         List<Materia> materias = new ArrayList<>();
         String sql = "SELECT m.id, m.nome FROM materias m " +

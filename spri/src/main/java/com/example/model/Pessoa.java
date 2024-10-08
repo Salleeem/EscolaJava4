@@ -1,9 +1,11 @@
 package com.example.model;
 
 public class Pessoa {
+
+    //Atributos que serão herdados
     private String nome;
     private String cpf;
-    private String senha; // Adicionado o campo senha
+    private String senha; 
 
     // Getters e Setters
     public String getNome() {

@@ -2,8 +2,9 @@ package com.example.model;
 
 public class Professor extends Pessoa {
     
+    //Atributos Exclusivos do Professor
     private int id;
-    private Materia materia; // A maté  ria que o professor leciona
+    private Materia materia; //Chave Estrangeira de Matéria
     private double salario;
 
     // Getters e Setters
