@@ -172,6 +172,28 @@ O Sistema de Gestão Escolar visa gerenciar o cadastro de professores e alunos, 
 -    FOREIGN KEY (id_materia) REFERENCES materias(id)
 - );
 
+## Testes Unitários
+
+%TESTC  3 v2
+%TSTTREE2,ProfessorServiceTest,true,3,false,1,ProfessorServiceTest,,[engine:junit-jupiter]/[class:ProfessorServiceTest]
+%TSTTREE3,getIdProfessor_CpfNulo(ProfessorServiceTest),false,1,false,2,getIdProfessor_CpfNulo(),,[engine:junit-jupiter]/[class:ProfessorServiceTest]/[method:getIdProfessor_CpfNulo()]
+%TSTTREE4,validarLogin_Invalido(ProfessorServiceTest),false,1,false,2,validarLogin_Invalido(),,[engine:junit-jupiter]/[class:ProfessorServiceTest]/[method:validarLogin_Invalido()]
+%TSTTREE5,buscarProfessorPorId_Invalido(ProfessorServiceTest),false,1,false,2,buscarProfessorPorId_Invalido(),,[engine:junit-jupiter]/[class:ProfessorServiceTest]/[method:buscarProfessorPorId_Invalido()]
+%TESTS  3,getIdProfessor_CpfNulo(ProfessorServiceTest)
+
+%TESTE  3,getIdProfessor_CpfNulo(ProfessorServiceTest)
+
+%TESTS  4,validarLogin_Invalido(ProfessorServiceTest)
+
+%TESTE  4,validarLogin_Invalido(ProfessorServiceTest)
+
+%TESTS  5,buscarProfessorPorId_Invalido(ProfessorServiceTest)
+
+%TESTE  5,buscarProfessorPorId_Invalido(ProfessorServiceTest)
+
+%RUNTIME1158
+
+
 
 
 ## Desenvolvimento
