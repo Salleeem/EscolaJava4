@@ -108,13 +108,12 @@ O Sistema de Gestão Escolar visa gerenciar o cadastro de professores e alunos, 
 
 **Admin:**
 
-'''sql
-CREATE TABLE Admin (
-    id SERIAL PRIMARY KEY,
-    nome VARCHAR(255) NOT NULL,
-    cpf VARCHAR(11) NOT NULL UNIQUE,
-    senha VARCHAR(255) NOT NULL
-);
+- CREATE TABLE Admin (
+-    id SERIAL PRIMARY KEY,
+-    nome VARCHAR(255) NOT NULL,
+-   cpf VARCHAR(11) NOT NULL UNIQUE,
+-    senha VARCHAR(255) NOT NULL
+- );
 
 **Aluno:**
 
