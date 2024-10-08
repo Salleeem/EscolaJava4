@@ -172,6 +172,8 @@ O Sistema de Gestão Escolar visa gerenciar o cadastro de professores e alunos, 
 -    FOREIGN KEY (id_materia) REFERENCES materias(id)
 - );
 
+---
+
 ## Testes Unitários
 
 %TESTC  3 v2
@@ -193,8 +195,11 @@ O Sistema de Gestão Escolar visa gerenciar o cadastro de professores e alunos, 
 
 %RUNTIME1158
 
+**Tests Results**
 
+![alt text](img/Uso.png)
 
+---
 
 ## Desenvolvimento
 
@@ -208,7 +213,7 @@ O Sistema de Gestão Escolar visa gerenciar o cadastro de professores e alunos, 
 
 **Diagrama de Uso:**
 
-![alt text](img/Uso.png)
+![alt text](img/test.png)
 
 # Manual do Usuário
 
