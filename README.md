@@ -108,6 +108,7 @@ O Sistema de Gestão Escolar visa gerenciar o cadastro de professores e alunos, 
 
 **Admin:**
 
+'''sql
 CREATE TABLE Admin (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
